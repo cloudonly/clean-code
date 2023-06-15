@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+
 	"github.com/luomu/clean-code/gen/apis/luomu/greet/v1/greetv1connect"
 	"github.com/luomu/clean-code/internal/service/greet"
 	"github.com/luomu/clean-code/pkg/middleware"
