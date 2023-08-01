@@ -9,7 +9,6 @@ import (
 	"golang.org/x/sync/errgroup"
 
 	internalhttp "github.com/luomu/clean-code/pkg/http"
-	"github.com/luomu/clean-code/pkg/util"
 )
 
 type Config struct {
@@ -29,7 +28,8 @@ type Config struct {
 func main() {
 	//requestMain()
 	//configMain()
-	fmt.Println(util.Hash("2734"))
+	//fmt.Println(util.Hash("2734"))
+	getAllResource()
 }
 
 func requestMain() {

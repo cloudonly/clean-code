@@ -90,3 +90,16 @@ func MustOpen(fileName, filePath string) (*os.File, error) {
 
 	return f, nil
 }
+
+func CheckFileExists(filename string) (bool, error) {
+	info, err := os.Stat(filename)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
+		}
+
+		return false, err
+	}
+
+	return !info.IsDir(), nil
+}
