@@ -3,6 +3,8 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+
 	"github.com/luomu/clean-code/gen/apis/luomu/greet/v1/greetv1connect"
 	"github.com/luomu/clean-code/internal/service/greet"
 	"github.com/luomu/clean-code/pkg/middleware"
@@ -14,6 +16,7 @@ func NewGinEngine() *gin.Engine {
 	//engine.Use(gin.Logger())
 	engine.Use(middleware.Log())
 	engine.Use(gin.Recovery())
+	engine.Use(otelgin.Middleware("gin-server"))
 	engine.UseH2C = true
 
 	v1 := engine.Group("v1")

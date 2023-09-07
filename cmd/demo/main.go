@@ -3,10 +3,15 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/jinzhu/configor"
 	"golang.org/x/sync/errgroup"
+	"k8s.io/apimachinery/pkg/util/wait"
+	"k8s.io/klog/v2"
 
 	internalhttp "github.com/luomu/clean-code/pkg/http"
 )
@@ -29,7 +34,8 @@ func main() {
 	//requestMain()
 	//configMain()
 	//fmt.Println(util.Hash("2734"))
-	getAllResource()
+	//getAllResource()
+	clientTest()
 }
 
 func requestMain() {
@@ -57,4 +63,20 @@ func group() {
 		return http.ListenAndServe(":8080", mux)
 	})
 	g.Wait()
+}
+
+func clientTest() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/healthz", func(writer http.ResponseWriter, request *http.Request) {
+		writer.Write([]byte("ok"))
+	})
+	serveFunc := func() {
+		fmt.Println("Just do it...")
+		err := http.ListenAndServe(net.JoinHostPort("localhost", strconv.Itoa(8080)), mux)
+		if err != nil {
+			klog.ErrorS(err, "Failed to start healthz server")
+		}
+	}
+	wait.Until(serveFunc, 5*time.Second, wait.NeverStop)
+	select {}
 }
