@@ -2,7 +2,6 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 
 	"github.com/luomu/clean-code/gen/apis/luomu/greet/v1/greetv1connect"
@@ -25,6 +24,9 @@ func NewGinEngine() *gin.Engine {
 			c.String(200, "<h1>Hi, Clean Code</h1>")
 		})
 	}
+
+	webhook := engine.Group("hooks")
+	registryWebhook(webhook)
 
 	registerConnect(engine)
 	return engine

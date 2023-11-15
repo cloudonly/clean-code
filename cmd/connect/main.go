@@ -21,19 +21,7 @@ import (
 )
 
 func main() {
-	// 初始化 tracer
-	tp, err := initTracer("http://local.jaeger-collector.com/api/traces")
-	if err != nil {
-		log.Fatal(err)
-	}
-	// 确保在程序结束时关闭 tracer provider
-	defer func() {
-		if err := tp.Shutdown(context.Background()); err != nil {
-			log.Printf("Error shutting down tracer provider: %v", err)
-		}
-	}()
-
-	addr := ":8080"
+	addr := ":9001"
 	router := router.NewGinEngine()
 	// use gin.Engine.Handler() to support h2c
 	Serve(addr, router.Handler())
@@ -76,6 +64,20 @@ func Serve(addr string, handler http.Handler) {
 		log.Println("timeout of 5 seconds.")
 	}
 	log.Println("Server exiting")
+}
+
+func trace() {
+	// 初始化 tracer
+	tp, err := initTracer("http://local.jaeger-collector.com/api/traces")
+	if err != nil {
+		log.Fatal(err)
+	}
+	// 确保在程序结束时关闭 tracer provider
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			log.Printf("Error shutting down tracer provider: %v", err)
+		}
+	}()
 }
 
 // 初始化 Tracer， 设置采样器，指定资源属性并创建 Jaeger exporter
